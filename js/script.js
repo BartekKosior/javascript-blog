@@ -1,12 +1,13 @@
+{
 'use strict'
 /*document.getElementById('test-button').addEventListener('click', function(){
     const links = document.querySelectorAll('.titles a');
     console.log('links:', links);
-  });*/
+});*/
 
-  const titleClickHandler = function(event){
+const titleClickHandler = function(event){
     event.preventDefault();
-    const clickedElement = this;
+    const clickedElement = this; 
     console.log('Link was clicked!');
     console.log('clickedElement (with plus): ' + clickedElement);
     
@@ -17,7 +18,7 @@
       activeLink.classList.remove('active');
     }
 
-    /* [IN PROGRESS] add class 'active' to the clicked link */
+    /* [DONE] add class 'active' to the clicked link */
     clickedElement.classList.add('active');
     console.log('clickedElement:', clickedElement);
     
@@ -27,18 +28,48 @@
       activeArticle.classList.remove('active');
     }
 
-    /* get 'href' attribute from the clicked link */
-    const articleSelector = element.clickedElement("href");
+    /* [DONE] get 'href' attribute from the clicked link */
+    const articleSelector = clickedElement.getAttribute('href');   
     console.log('articleSelector:', articleSelector);
 
-    /* find the correct article using the selector (value of 'href' attribute) */
+    /* [DONE] find the correct article using the selector (value of 'href' attribute) */
+    const targetArticle = document.querySelector(articleSelector);      /*czy tu powinno być 'href' w nawiasie? */
+    console.log('targetArticle:', targetArticle);
 
-    /* add class 'active' to the correct article */
+    /* [DONE] add class 'active' to the correct article */
+    targetArticle.classList.add('active');
+    console.log('targetArticle:', targetArticle);
 
-  }
+}
   
-  const links = document.querySelectorAll('.titles a');
-  
-  for(let link of links){
+const links = document.querySelectorAll('.titles a');
+for(let link of links){
     link.addEventListener('click', titleClickHandler);
-  }
+}
+
+const optArticleSelector = '.post',
+  optTitleSelector = '.post-title',
+  optTitleListSelector = '.titles';
+
+function generateTitleLinks(){
+  console.log('Function work !!!');
+  /* remove contents of titleList */
+  const titleList = document.querySelector(optTitleListSelector);
+  /* for each article */
+    /* get the article id */   /*and right to const*/
+    
+    /* find the title element */  /*and right to const*/
+
+    /* get the title from the title element */   
+
+    /* create HTML of the link */
+
+    /* insert link into titleList */
+
+
+}
+
+generateTitleLinks();
+
+
+}
