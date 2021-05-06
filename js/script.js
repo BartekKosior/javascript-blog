@@ -29,11 +29,11 @@ const titleClickHandler = function(event){
     }
 
     /* [DONE] get 'href' attribute from the clicked link */
-    const articleSelector = clickedElement.getAttribute('href');   
+    const articleSelector = clickedElement.getAttribute('href');   /* przypisz do stałej articleselector to co wieźmiesz z atrybutu href elementu clickedElement */
     console.log('articleSelector:', articleSelector);
 
     /* [DONE] find the correct article using the selector (value of 'href' attribute) */
-    const targetArticle = document.querySelector(articleSelector);      /*czy tu powinno być 'href' w nawiasie? */
+    const targetArticle = document.querySelector(articleSelector);
     console.log('targetArticle:', targetArticle);
 
     /* [DONE] add class 'active' to the correct article */
@@ -49,15 +49,22 @@ for(let link of links){
 
 const optArticleSelector = '.post',
   optTitleSelector = '.post-title',
-  optTitleListSelector = '.titles';
+  optTitleListSelector = '.titles'; 
 
 function generateTitleLinks(){
   console.log('Function work !!!');
   /* remove contents of titleList */
   const titleList = document.querySelector(optTitleListSelector);
   /* for each article */
-    /* get the article id */   /*and right to const*/
+    /* [IN PROGRESS] get the article id */   /*and right to const*/
+    titleList.innerHTML = '';  /* usunięcie zawartości listy linków  */
+    const articles = document.querySelectorAll('.post');      /* CZY MOZE - document.querySelector(optArticleSelector) ??? */   /*zapisz do stałej articles odniesienie do wszystkich elementów pasujących do selektora zapisanego w stałej optArticleSelector */
+    for(let article of articles){
+      
+    }
     
+
+
     /* find the title element */  /*and right to const*/
 
     /* get the title from the title element */   
