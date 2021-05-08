@@ -10,8 +10,7 @@ const titleClickHandler = function(event){
     const clickedElement = this; 
     console.log('Link was clicked!');
     console.log('clickedElement (with plus): ' + clickedElement);
-    
-    
+        
     /* [DONE] remove class 'active' from all article links  */
     const activeLinks = document.querySelectorAll('.titles a.active');
     for(let activeLink of activeLinks){
@@ -53,27 +52,35 @@ const optArticleSelector = '.post',
 
 function generateTitleLinks(){
   console.log('Function work !!!');
-  /* remove contents of titleList */
+  /* [DONE] remove contents of titleList */
   const titleList = document.querySelector(optTitleListSelector);
-  /* for each article */
-    /* [IN PROGRESS] get the article id */   /*and right to const*/
-    titleList.innerHTML = '';  /* usunięcie zawartości listy linków  */
-    const articles = document.querySelectorAll('.post');      /* CZY MOZE - document.querySelector(optArticleSelector) ??? */   /*zapisz do stałej articles odniesienie do wszystkich elementów pasujących do selektora zapisanego w stałej optArticleSelector */
-    for(let article of articles){
+  titleList.innerHTML = '';  /* usunięcie zawartości listy linków  */
+  
+  /* find all the articles and save them to variable: articles */
+  const articles = document.querySelector(optArticleSelector); /*zapisz do stałej articles odniesienie do wszystkich elementów pasujących do selektora zapisanego w stałej optArticleSelector */
       
-    }
+  let html = '';
+  for(let article of articles){
+    /* [IN PROGRESS] get the article id */
+    const articleId = optArticleSelector.getAttribute('id');    /* ??????? */
     
+    /* [DONE] find the title element */
+    const articleTitle = article.querySelector(optTitleSelector).innerHTML;
 
-
-    /* find the title element */  /*and right to const*/
 
     /* get the title from the title element */   
 
     /* create HTML of the link */
+    const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';
+    console.log('linkHTML:', linkHTML);
 
     /* insert link into titleList */
+    html = html + linkHTML;
+    
+    console.log('const html:', html);
+  }
 
-
+  titleList.innerHTML = html; 
 }
 
 generateTitleLinks();
