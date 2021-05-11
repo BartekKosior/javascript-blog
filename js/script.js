@@ -41,10 +41,11 @@ const titleClickHandler = function(event){
 
 }
   
-const links = document.querySelectorAll('.titles a');
+/*const links = document.querySelectorAll('.titles a');
+console.log('links:', links);
 for(let link of links){
     link.addEventListener('click', titleClickHandler);
-}
+}*/
 
 const optArticleSelector = '.post',
   optTitleSelector = '.post-title',
@@ -57,17 +58,16 @@ function generateTitleLinks(){
   titleList.innerHTML = '';  /* usunięcie zawartości listy linków  */
   
   /* find all the articles and save them to variable: articles */
-  const articles = document.querySelector(optArticleSelector); /*zapisz do stałej articles odniesienie do wszystkich elementów pasujących do selektora zapisanego w stałej optArticleSelector */
+  const articles = document.querySelectorAll(optArticleSelector); /*zapisz do stałej articles odniesienie do wszystkich elementów pasujących do selektora zapisanego w stałej optArticleSelector */
       
   let html = '';
   for(let article of articles){
     /* [IN PROGRESS] get the article id */
-    const articleId = optArticleSelector.getAttribute('id');    /* ??????? */
+    const articleId = article.getAttribute('id');    /* ??????? */
     
     /* [DONE] find the title element */
     const articleTitle = article.querySelector(optTitleSelector).innerHTML;
-
-
+    
     /* get the title from the title element */   
 
     /* create HTML of the link */
@@ -76,14 +76,16 @@ function generateTitleLinks(){
 
     /* insert link into titleList */
     html = html + linkHTML;
-    
     console.log('const html:', html);
   }
+  titleList.innerHTML = html;
 
-  titleList.innerHTML = html; 
-}
-
-generateTitleLinks();
-
+  const links = document.querySelectorAll('.titles a');
+  console.log('links:', links);
+  for(let link of links){
+    link.addEventListener('click', titleClickHandler);
+  }
+}  
+  generateTitleLinks();
 
 }
