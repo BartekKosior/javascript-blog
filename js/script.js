@@ -314,6 +314,8 @@
     authorList.innerHTML = allAuthorsHTML; 
 
 
+
+    
   }
   generateAuthors();
 
