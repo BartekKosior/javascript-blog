@@ -1,4 +1,20 @@
 {
+  const templates = {
+    articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML)
+    tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
+     
+  
+    
+  }
+  const optArticleSelector = '.post',
+    optTitleSelector = '.post-title',
+    optTitleListSelector = '.titles',
+    optArticleTagsSelector = '.post-tags .list',
+    optArticleAuthorSelector = '.post-author',
+    optTagsListSelector = '.tags.list',
+    optCloudClassCount = '5',
+    optCloudClassPrefix = 'tag-size-';
+ 
   'use strict';
   /*document.getElementById('test-button').addEventListener('click', function(){
     const links = document.querySelectorAll('.titles a');
@@ -6,7 +22,7 @@
   });*/
 
   const titleClickHandler = function(event){
-    event.preventDefault();                    /* zapobiec domyśnej akcji - przejscie do gory strony */  /* ????????????? po co ? */
+    event.preventDefault();                    /* zapobiec domyśnej akcji - przejscie do gory strony */ 
     const clickedElement = this;
     console.log('Link was clicked!');
     console.log('clickedElement (with plus): ' + clickedElement);
@@ -45,16 +61,6 @@
     link.addEventListener('click', titleClickHandler);
   }*/
 
-  const optArticleSelector = '.post',
-    optTitleSelector = '.post-title',
-    optTitleListSelector = '.titles',
-    optArticleTagsSelector = '.post-tags .list',
-    optArticleAuthorSelector = '.post-author',
-    optTagsListSelector = '.tags.list',
-    optCloudClassCount = '5',
-    optCloudClassPrefix = 'tag-size-';
-
-
   function generateTitleLinks(customSelector = ''){    /*argument customSelector, który domyślnie jest pustym ciągiem znaków. */
     console.log('Function work !!!');
     /* [DONE] remove contents of titleList */
@@ -62,7 +68,7 @@
     titleList.innerHTML = '';  /* usunięcie zawartości listy linków  */
     
     /* [DONE] find all the articles and save them to variable: articles */
-    const articles = document.querySelectorAll(optArticleSelector + customSelector); /* ???????????????? po co customSelector  */  /*zapisz do stałej articles odniesienie do wszystkich elementów pasujących do selektora zapisanego w stałej optArticleSelector */
+    const articles = document.querySelectorAll(optArticleSelector + customSelector); /*zapisz do stałej articles odniesienie do wszystkich elementów pasujących do selektora zapisanego w stałej optArticleSelector */
     console.log('articles:', articles);
     console.log('customSelector:', customSelector);
     let html = '';
@@ -74,7 +80,9 @@
       const articleTitle = article.querySelector(optTitleSelector).innerHTML;
     
       /* [DONE] create HTML of the link */
-      const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';  /* ??????????????  czemu span ? */
+      /* const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>'; */ 
+      const linkHTMLData = {id: articleId, title: articleTitle};    /* wykorzytanie szablonu handlebars*/
+      const linkHTML = templates.articleLink(linkHTMLData);         /* wykorzytanie szablonu handlebars*/
       console.log('linkHTML:', linkHTML);
 
       /* [DONE] insert link into titleList */
@@ -148,7 +156,9 @@
       for(let tag of tags){
         
         /* [DONE] generate HTML of the link */
-        const linkHTML = '<li><a href = "#tag-'+tag+'">'+tag+'</a></li>';
+        /* const linkHTML = '<li><a href = "#tag-'+tag+'">'+tag+'</a></li>'; */
+        const linkHTMLData = {id: 'tag-'+tag, title: tag};                 /* wykorzytanie szablonu handlebars */
+        const linkHTML = templates.articleLink(linkHTMLData);               /* wykorzytanie szablonu handlebars */
         console.log('linkHTML - tag:', linkHTML);
 
         /* [DONE] add generated code to html variable */
@@ -156,7 +166,7 @@
 
         /* [NEW] check if this link is NOT already in allTags */
         /*if(allTags.indexOf(linkHTML) == -1){                               tablica */
-        if(!allTags[tag]) { /* "jeśli allTags NIE MA klucza tag" */      /* zmiana na obiekt */   /* ????????????????????????????? */
+        if(!allTags[tag]) { /* "jeśli allTags NIE MA klucza tag" */      /* zmiana na obiekt */ 
 
           /* [NEW] add generated code to allTags /array/ object */
           /* allTags.push(linkHTML);                                     tablica  */
@@ -168,7 +178,7 @@
       /* END LOOP: for each tag */
   
       /* [DONE] insert HTML of all the links into the tags wrapper */
-      tagsList.innerHTML = html;                                           /* ?????????? */
+      tagsList.innerHTML = html;                                         
     }
     /* END LOOP: for every article: */
     /* [NEW] find list of tags in right column */
@@ -182,7 +192,8 @@
     console.log('tagsParams:', tagsParams)
     
     /* [NEW] create variable for all links HTML code */
-    let allTagsHTML = '';
+    /* let allTagsHTML = ''; */
+    const allTagsData = {tags: []};         /* wykorzytanie szablonu handlebars */
 
     /* [NEW] START LOOP: for each tag in allTags: */
     for(let tag in allTags){
@@ -190,13 +201,19 @@
       /* allTagsHTML += tag + ' (' + allTags[tag] + ') '; */
       const tagLinkHTML = '<li> <a href="#tag-' + tag + '" class="' + calculateTagClass(allTags[tag], tagsParams) + '">' +tag+ ' (' +allTags[tag]+ ') </a></li>'; 
       console.log('tagLinkHTML:', tagLinkHTML);
-      allTagsHTML += tagLinkHTML;
+      /* allTagsHTML += tagLinkHTML; */     /* doklejenie kodu kolejnego linka do allTagsHTML */
+      allTagsData.tags.push({              /* wykorzytanie szablonu handlebars */
+        tag: tag,
+        count: allTags[tag],
+        className: calculateTagClass(allTags[tag], tagsParams)
+      });
     }
     /* [NEW] END LOOP: for each tag in allTags: */
 
     /*[NEW] add HTML from allTagsHTML to tagList */
-    tagList.innerHTML = allTagsHTML; 
-
+    /* tagList.innerHTML = allTagsHTML; */
+    tagList.innerHTML = templates.tagCloudLink(allTagsData);  /* wykorzytanie szablonu handlebars */
+    console.log('allTagsData:', allTagsData);
   }
   generateTags();
 
@@ -275,15 +292,17 @@
       /* [DONE] find authors wrapper */ 
       const authorWrapper = article.querySelector(optArticleAuthorSelector);
 
-      /* [DONE]      */
+      /*     */
       const author = article.getAttribute('data-author');
-      const linkHtml = 'by <a href = "#author-'+author+'">'+author+'</a>';
-      console.log('linkHtml:', linkHtml);
+      /* const linkHtml = 'by <a href = "#author-'+author+'">'+author+'</a>'; */
+      const linkHTMLData = {id: 'author-'+author, title: author};                 /* wykorzytanie szablonu handlebars */
+      const linkHTML = templates.articleLink(linkHTMLData);               /* wykorzytanie szablonu handlebars */
+      console.log('linkHtml:', linkHTML);
+      
       /* [DONE] add generated code to html variable */
-      authorWrapper.innerHTML = linkHtml;
+      authorWrapper.innerHTML = linkHTML;
 
       if(!allAuthors[author]) { 
-
           allAuthors[author] = 1; 
           } else {          
           allAuthors[author]++;
@@ -313,12 +332,8 @@
     /*[NEW] add HTML from allTagsHTML to tagList */
     authorList.innerHTML = allAuthorsHTML; 
 
-
-
-    
   }
   generateAuthors();
-
 
 
   function authorClickHandler(event){
@@ -362,8 +377,6 @@
     generateTitleLinks('[data-author="' + author + '"]'); /* łącznik ~=, który możemy odczytać jako "znajdź elementy, które mają atrybut data-tags, który ma w sobie słowo 'tag'".*/
   }
 
-
-
   function addClickListenersToAuthors(){
     /* [DONE] find all links to authors */
     const authorsLinks = document.querySelectorAll('[href^="#author-"]');
@@ -378,9 +391,6 @@
     }
   }
   addClickListenersToAuthors();
-
-
-  
 
 }
 
