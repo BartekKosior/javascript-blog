@@ -1,8 +1,10 @@
 {
   const templates = {
-    articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML)
-    tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML)
-     
+    articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),           /* 1 */
+    tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),                  /* 2 */
+    authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),             /* 3 */
+    tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML),        /* 4 */
+    authorsListLink: Handlebars.compile(document.querySelector('#template-authors-list-link').innerHTML)  /* 5 */
   
     
   }
@@ -81,8 +83,8 @@
     
       /* [DONE] create HTML of the link */
       /* const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>'; */ 
-      const linkHTMLData = {id: articleId, title: articleTitle};    /* wykorzytanie szablonu handlebars*/
-      const linkHTML = templates.articleLink(linkHTMLData);         /* wykorzytanie szablonu handlebars*/
+      const linkHTMLData = {id: articleId, title: articleTitle};            /* wykorzytanie szablonu handlebars  1 */
+      const linkHTML = templates.articleLink(linkHTMLData);                 /* wykorzytanie szablonu handlebars  1 */
       console.log('linkHTML:', linkHTML);
 
       /* [DONE] insert link into titleList */
@@ -157,8 +159,8 @@
         
         /* [DONE] generate HTML of the link */
         /* const linkHTML = '<li><a href = "#tag-'+tag+'">'+tag+'</a></li>'; */
-        const linkHTMLData = {id: 'tag-'+tag, title: tag};                 /* wykorzytanie szablonu handlebars */
-        const linkHTML = templates.articleLink(linkHTMLData);               /* wykorzytanie szablonu handlebars */
+        const linkHTMLData = {tag: tag};                                     /* wykorzytanie szablonu handlebars 2 */
+        const linkHTML = templates.tagLink(linkHTMLData);                   /* wykorzytanie szablonu handlebars 2 */
         console.log('linkHTML - tag:', linkHTML);
 
         /* [DONE] add generated code to html variable */
@@ -193,7 +195,7 @@
     
     /* [NEW] create variable for all links HTML code */
     /* let allTagsHTML = ''; */
-    const allTagsData = {tags: []};         /* wykorzytanie szablonu handlebars */
+    const allTagsData = {tags: []};              /* wykorzytanie szablonu handlebars 4 */
 
     /* [NEW] START LOOP: for each tag in allTags: */
     for(let tag in allTags){
@@ -202,7 +204,7 @@
       const tagLinkHTML = '<li> <a href="#tag-' + tag + '" class="' + calculateTagClass(allTags[tag], tagsParams) + '">' +tag+ ' (' +allTags[tag]+ ') </a></li>'; 
       console.log('tagLinkHTML:', tagLinkHTML);
       /* allTagsHTML += tagLinkHTML; */     /* doklejenie kodu kolejnego linka do allTagsHTML */
-      allTagsData.tags.push({              /* wykorzytanie szablonu handlebars */
+      allTagsData.tags.push({                     /* wykorzytanie szablonu handlebars */
         tag: tag,
         count: allTags[tag],
         className: calculateTagClass(allTags[tag], tagsParams)
@@ -212,7 +214,7 @@
 
     /*[NEW] add HTML from allTagsHTML to tagList */
     /* tagList.innerHTML = allTagsHTML; */
-    tagList.innerHTML = templates.tagCloudLink(allTagsData);  /* wykorzytanie szablonu handlebars */
+    tagList.innerHTML = templates.tagCloudLink(allTagsData);  /* wykorzytanie szablonu handlebars 4 */
     console.log('allTagsData:', allTagsData);
   }
   generateTags();
@@ -291,12 +293,12 @@
       
       /* [DONE] find authors wrapper */ 
       const authorWrapper = article.querySelector(optArticleAuthorSelector);
-
+      const authorTitle = article.querySelector(optArticleAuthorSelector).innerHTML;
       /*     */
       const author = article.getAttribute('data-author');
       /* const linkHtml = 'by <a href = "#author-'+author+'">'+author+'</a>'; */
-      const linkHTMLData = {id: 'author-'+author, title: author};                 /* wykorzytanie szablonu handlebars */
-      const linkHTML = templates.articleLink(linkHTMLData);               /* wykorzytanie szablonu handlebars */
+      const linkHTMLData = {id: author, title: authorTitle};                            /* wykorzytanie szablonu handlebars 3 */
+      const linkHTML = templates.authorLink(linkHTMLData);                              /* wykorzytanie szablonu handlebars 3 */
       console.log('linkHtml:', linkHTML);
       
       /* [DONE] add generated code to html variable */
@@ -317,13 +319,21 @@
 
       
     /* [NEW] create variable for all links HTML code */
-    let allAuthorsHTML = '';
+     let allAuthorsHTML = ''; 
+    
 
     /* [NEW] START LOOP: for each tag in allTags: */
     for(let author in allAuthors){
       /* [NEW] generate code of a link and add it to allTagsHTML */
       /* allTagsHTML += tag + ' (' + allTags[tag] + ') '; */
-      const authorLinkHTML = '<li> <a href="#author-' + author + '">' +author+ ' (' +allAuthors[author]+ ') </a></li>'; 
+      /* const authorLinkHTML = '<li> <a href="#author-' + author + '">' +author+ ' (' +allAuthors[author]+ ') </a></li>'; */
+      const authorData = {
+        author: author,              /* imie i nazw autora */
+        
+      }
+      const authorLinkHTML = templates.authorsListLink(authorData);                                     /* wykorzytanie szablonu handlebars 5 */
+      
+      
       console.log('authorLinkHTML:', authorLinkHTML);
       allAuthorsHTML += authorLinkHTML;
     }
